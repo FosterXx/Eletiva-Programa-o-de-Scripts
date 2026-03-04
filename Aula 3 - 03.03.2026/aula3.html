@@ -5,10 +5,33 @@
         <title>Aula 3</title>
         <meta charset="UTF-8">
 
-        <script type="text/javascript">
-            alert('Ola Mundo!'); // Mensagem de alerta
-            console.log('Exemplo teste') // Testar no console do site, ferramenta do desenvolvedor
-            
+        <script type="text/javascript"> // Usar o JavaScript.
+            alert('Ola Mundo!'); // Mensagem de alerta.
+            console.log('Exemplo de teste no console'); // Testar no console do site, ferramenta do desenvolvedor.
+
+            // Declarar Variaveis:
+            // nome = 'Benedito';
+            // var nome1 = 'Gabriel';
+            // let nome2 = 'Laura';
+
+            // const PI = 3.1415; // Variavel com letra maiuscula é constante.
+
+            let nome = prompt('Informe seu nome: ')
+            let sobrenome = prompt('Informe seu sobrenome: ')
+            alert('Seu nome completo é '+ nome +' '+ sobrenome) // Usando o mais (+), não funciona a virgula (,)!
+            alert(`Seu nome completo é ${nome} ${sobrenome}`) // Obrigatorio usar crase (`)!
+
+            let numero = '9';
+            numero = parseFloat(numero) // Ou parseInt(numero), essas opções de parse converte a string para numero decimal ou inteiro.
+
+            // Atividade:
+            let num1 = parseFloat(prompt('Digite o primeiro número: '))
+            let num2 = parseFloat(prompt('Digite o segundo número: '))
+
+            let soma = num1 + num2
+
+            alert(`A soma de ${num1} + ${num2} = ${soma}`)
+
         </script>
 
     </head>
