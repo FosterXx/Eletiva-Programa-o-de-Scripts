@@ -1,0 +1,8 @@
+1. O que são vetores e como eles são utilizados em JavaScript?
+    R- Vetores ou arrays é um tipo de variavel onde possibilita armazenar dados ordenados com base em indece, que são vitais na utilização em listas e banco de dados. Ao contrario da definição de uma variavel comum como int que é feita como (let variavel = 3), o vetor é definido com colchetes (const vetor = []). Em logica, cada vetor possui indeces infinitos (vetor = [0 , 1 , 2 , 3]) que possibilita o armazenamento e manipulação de inumeros dados diferentes.
+
+2. O que são funções e como eles são utilizados em JavaScript?
+    R- Funções são pequenos codigos pre definidos, também chamados de sub programa, onde recebe dados, processa dentro da função em um codigo pre definido e retorna um resultado, como se fosse uma dimensão particular que funciona com a entrada, processo e retorno sem influenciar leis globais.
+
+3. O que são eventos e apresente exemplos.
+    R- Eventos são as interações do beck-end com o usuario, onde a partir de uma determinada ação, é executado uma serie de instruções e retornado alguma interação. Por exemplo, quando o usuario clica em um botão em um site, é acionado um novo evento que processa um codigo e registra um dado logo mudando de tela (como em uma tela de login).
