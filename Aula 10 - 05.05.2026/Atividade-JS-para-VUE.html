@@ -38,15 +38,21 @@
 
         </script>
     </head>
-    
+
     <body>
 
-        <h1>Conversão Real / Dólar</h1>
-        <b>Dólar: </b><input type="number" id="dolar" value="5.19">
+        <div id="app" class="container">
+
+            <h1>Conversão Real / Dólar</h1>
+
+
+
+        </div>
+
+        <!-- <b>Dólar: </b><input type="number" id="dolar" value="5.19">
         <br>
         <b>Valor: </b><input type="number" id="valor" value="0.19">
         <br><br>
-        <!-- <button onclick="alert('ok')">Converter</button> -->
         
         <select id="tipo" >
             <option value="1">Real para Dólar</option>
@@ -54,7 +60,31 @@
         </select>
 
         <button id="btnConverter">CONVERTER</button>
-        <p><b id="resultado">Resultado: </b></p>
+        <p><b id="resultado">Resultado: </b></p> -->
+
+            <script type="text/javascript">
+
+            let app = new Vue({
+                el: '#app',
+
+                // data: {
+                //     // produto: '',
+                //     // listaProdutos: [],
+                //     // mensagem: 'Digite um produto para adicionar',
+                // },
+
+                methods: {
+                    // adicionar: function() {
+                    //     if (this.produto != '') {
+                    //     this.listaProdutos.push(this.produto)    
+                    //     }
+                    //     this.produto = ''
+                    // }
+
+                }
+            })
+
+        </script>
 
     </body>
 
