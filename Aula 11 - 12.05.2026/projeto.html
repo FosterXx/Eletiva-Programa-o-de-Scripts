@@ -121,14 +121,16 @@
                 },
                 carregar: function() {
                     let dados = localStorage.getItem('listaLivros')
+                    if (dados != null) {
+                        this.listaLivros = JSON.parse(dados)
+                    }
                 }
+            },
+            created() {
+                this.carregar()
             }
+
         }) 
-
-
-
-
-
 
     </script>
 </body>
