@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARTEIRA DE INVESTIMENTOS</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+<body>
+    <div id="app" class="container my-5">
+        
+        <div class="row mb-5 text-center">
+            <div class="col">
+                <h1 class="display-5 fw-bold text-primary">💼 CARTEIRA DE INVESTIMENTOS</h1>
+                <p class="text-muted text-uppercase tracking-wider">Gerencie seus fundos imobiliários com praticidade</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            
+            <div class="col-md-5"> 
+                <div class="card shadow-sm border-secondary">
+                    <div class="card-body p-4">
+                        <h3 class="card-title mb-4 text-secondary fs-5 fw-bold text-uppercase">➕ Cadastro de Ativos</h3>
+
+                        <form action="#" method="post" @submit.prevent="salvar()">
+
+                            <div class="mb-3">
+                                <label for="ativo" class="form-label fw-semibold">Ativo:</label>
+                                <input type="text" class="form-control text-uppercase" v-model="ativo" pattern="[A-Za-z0-9]+" placeholder="Ex: GARE11">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cotas" class="form-label fw-semibold">Cotas:</label>
+                                <input type="number" class="form-control" v-model.number="cotas" placeholder="Quantidade de cotas">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="precoMedio" class="form-label fw-semibold">Preço Médio:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-dark-subtle fw-bold text-secondary">R$</span>
+                                    <input type="number" class="form-control" v-model.number="precoMedio" min="0" step="0.01" placeholder="0,00">
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button v-if="verificar()" class="btn btn-primary px-4 fw-bold w-100">SALVAR</button>                        
+                                <button v-else class="btn btn-secondary px-4 w-100" disabled>SALVAR</button>
+                                
+                                <button type="button" class="btn btn-outline-light" v-if="posicao != -1" @click="limpar()">CANCELAR</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="card shadow-sm border-secondary">
+                    <div class="card-body p-4">
+                        <h3 class="card-title mb-4 text-secondary fs-5 fw-bold text-uppercase">🏢 Fundos Imobiliários</h3>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="text-secondary small fw-bold">CÓDIGO</th>
+                                        <th scope="col" class="text-secondary small fw-bold">ATIVO</th>
+                                        <th scope="col" class="text-secondary small fw-bold">COTAS</th>
+                                        <th scope="col" class="text-secondary small fw-bold">PREÇO MÉDIO</th>
+                                        <th scope="col" class="text-secondary small fw-bold text-center" colspan="2">AÇÕES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(fundo, posicao) in listaAtivos" :key="fundo.codigo">
+                                        <td class="fw-bold text-muted">#{{ fundo.codigo }}</td>
+                                        <td class="fw-bold text-info">{{ fundo.ativo }}</td>
+                                        <td><span class="badge bg-dark text-light border border-secondary px-2 py-1">{{ fundo.cotas }}</span></td>
+                                        <td class="text-success fw-semibold">R$ {{ String(fundo.precoMedio).replace('.',',') }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-warning fw-semibold px-3" @click="alterar(posicao)">ALTERAR</button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-danger fw-semibold px-3" @click="excluir(posicao)">EXCLUIR</button>
+                                        </td>
+                                    </tr>
+                                    <tr v-if="listaAtivos.length == 0">
+                                        <td colspan="6" class="text-center text-muted py-4 style-italic">Nenhum ativo cadastrado na carteira.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div> </div> <script type="text/javascript">
+        class Fundo {
+            constructor(codigo, ativo, cotas, precoMedio) {
+                this.codigo = codigo
+                this.ativo = ativo
+                this.cotas = cotas
+                this.precoMedio = precoMedio
+            }
+        }
+
+        let app = new Vue({
+            el: '#app',
+            data: {
+                codigo: 1,
+                ativo: '',
+                cotas: '',
+                precoMedio: '',
+                posicao: -1, 
+                listaAtivos: []
+            },
+            methods: {
+                salvar: function() {
+                    if (this.posicao != -1) {
+                        let fundoEditado = this.listaAtivos[this.posicao]
+                        fundoEditado.ativo = this.ativo.toUpperCase()
+                        fundoEditado.cotas = this.cotas
+                        fundoEditado.precoMedio = Number(this.precoMedio).toFixed(2)
+                    } 
+                    else {
+                        let posicaoExistente = this.listaAtivos.findIndex(fundo => fundo.ativo.toUpperCase() == this.ativo.toUpperCase())
+
+                        if (posicaoExistente != -1) {
+                            let fundoExistente = this.listaAtivos[posicaoExistente]
+                            let cotasTotais = fundoExistente.cotas + this.cotas
+                            let precoMedioTotal = ((fundoExistente.cotas * fundoExistente.precoMedio)+(this.cotas * this.precoMedio)) / cotasTotais
+
+                            fundoExistente.cotas = cotasTotais
+                            fundoExistente.precoMedio = precoMedioTotal.toFixed(2)
+                        }
+                        else {
+                            let fundo = new Fundo(this.codigo, this.ativo.toUpperCase(), this.cotas, this.precoMedio)
+                            this.listaAtivos.push(fundo)
+                            this.codigo++
+                        }
+                    }
+                    this.armazenar()
+                    this.limpar()
+                },
+                verificar: function() {
+                    return this.codigo != '' && this.ativo != '' && this.cotas != '' && this.precoMedio != ''
+                },
+                limpar: function() {
+                    this.posicao = -1
+                    this.ativo = ''
+                    this.cotas = ''
+                    this.precoMedio = ''
+                },
+                alterar: function(posicao) {
+                    this.posicao = posicao
+                    this.codigo = this.listaAtivos[posicao].codigo
+                    this.ativo = this.listaAtivos[posicao].ativo
+                    this.cotas = this.listaAtivos[posicao].cotas
+                    this.precoMedio = this.listaAtivos[posicao].precoMedio
+                },
+                excluir: function(posicao) {
+                    if (confirm('Tem certeza que deseja excluir?')) {
+                        this.listaAtivos.splice(posicao, 1)
+                        this.armazenar()
+                    }
+                },
+                armazenar: function() {
+                    localStorage.setItem('listaAtivos', JSON.stringify(this.listaAtivos))
+                },
+                carregar: function() {
+                    let dados = localStorage.getItem('listaAtivos')
+                    if (dados != null) {
+                        this.listaAtivos = JSON.parse(dados)
+                        this.listaAtivos.forEach(fundo => {
+                            if (fundo.codigo >= this.codigo) {
+                                this.codigo = fundo.codigo + 1
+                            }
+                        })
+                    }
+                }
+            },
+            created() {
+                this.carregar()
+            }
+        }) 
+    </script>
+</body>
+</html>
