@@ -1,83 +1,122 @@
 <!DOCTYPE html>
 <html lang="pt-br" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>CARTEIRA DE INVESTIMENTOS</title>
+
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
     <script type="text/javascript" src="vue.js"></script>
+
 </head>
+
 <body>
-    <div id="app" class="container">
+
+    <div id="app" class="container my-5"> <!-- Seria a folha inteira o container -->
 
         <div class="row mb-5 text-center">
-            <div class="col">
+            <div class="col " >
                 <h1 class="display-5 fw-light text-primary">💼 CARTEIRA DE INVESTIMENTOS</h1>
                 <p class="text-muted text-uppercase tracking-wider">GERENCIE SEUS FILL'S COM PRATICIDADE</p>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6"> 
+        <div class="row"> <!-- Defini as linhas do container para que possamos dividir em colunas com o col -->
 
-                <h1>CADASTRO DE ATIVOS</h1>
+            <div class="col-md-6"> <!-- esta div divide a tela em duas 6+6 (tela total = 12) -->
 
-                <form action="#" method="post" @submit.prevent="salvar()">
+                <div class="card shadow-lg mt-4"> <!-- começo do card de cadastro -->
 
-                    <label for="ativo">ATIVO:</label>
-                    <input type="text" class="form-control mb-2" v-model="ativo" pattern="[A-Za-z0-9]+">
+                    <div class="card-header"> <!-- começo do card de titulo -->
+                        <h4 class="text-center">CADASTRO DE ATIVOS</h4>
+                    </div> <!-- fim do card de titulo -->
+                
+                    <div class="card-body"> <!-- começo do card de campos -->
+                        <form action="#" method="post" @submit.prevent="salvar()">
 
-                    <label for="cotas">COTAS:</label>
-                    <input type="number" class="form-control mb-2" v-model.number="cotas">
+                            <div class="mb-3">
+                                <label for="ativo">ATIVO:</label>
+                                <input type="text" class="form-control" v-model="ativo" pattern="[A-Za-z0-9]+" placeholder="EX: GARE11">
+                            </div>
 
-                    <label for="precoMedio">PREÇO MÉDIO:</label>
-                    <input type="number" class="form-control mb-2" v-model.number="precoMedio" min="0" step="0.01">
+                            <div class="mb-3">
+                                <label for="cotas">COTAS:</label>
+                                <input type="number" class="form-control" v-model.number="cotas" placeholder="0">
+                            </div>
 
-                    <div v-if="verificar()">
-                        <button class="btn btn-primary">SALVAR</button>                        
-                    </div>
-                    <div v-else>
-                        <button class="btn btn-secondary" disabled>SALVAR</button>
-                    </div>
+                            <div class="mb-3">
+                                <label for="precoMedio">PREÇO MÉDIO:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-dark-subtle fw-bold text-secondary">R$</span>
+                                    <input type="number" class="form-control" v-model.number="precoMedio" min="0" step="0.01" placeholder="0,00">
+                                </div>
+                            </div>
 
-                </form>
+                            <div v-if="verificar()">
+                                <button class="btn btn-primary">SALVAR</button>                        
+                            </div>
+                            <div v-else>
+                                <button class="btn btn-secondary" disabled>SALVAR</button>
+                            </div>
+                        </form>
+                    </div> <!-- fim do card de campos -->
+
+                </div> <!-- fim do card de cadastro -->
 
             </div>
 
             <div class="col-md-6">
 
-                <h1>FUNDOS IMOBILIÁRIOS</h1>
+                <div class="card shadow-lg mt-4">
 
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>CÓDIGO</th>
-                            <th>ATIVO</th>
-                            <th>COTAS</th>
-                            <th>PREÇO MÉDIO</th>
-                            <th>ALTERAR</th>
-                            <th>EXCLUIR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(fundo, posicao) in listaAtivos">
-                            <td>{{ fundo.codigo }}</td>
-                            <td>{{ fundo.ativo }}</td>
-                            <td>{{ fundo.cotas }}</td>
-                            <td>R$ {{ String(fundo.precoMedio).replace('.',',') }}</td>
-                            <td>
-                                <a href="#" class="btn btn-warning" @click="alterar(posicao)">ALTERAR</a>
-                            </td>
-                            <td>
-                                <a href="#" class="btn btn-danger" @click="excluir(posicao)">EXCLUIR</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div class="card-header"> <!-- começo do card de titulo -->
+                        <h4 class="text-center">FUNDOS IMOBILIÁRIOS</h4>
+                    </div>
+
+                    <div class="card-body"> <!-- começo do card de campos -->
+
+                        <table class="table table-striped">
+
+                            <thead>
+                                <tr class="text-center">
+                                    <th>CÓDIGO</th>
+                                    <th>ATIVO</th>
+                                    <th>COTAS</th>
+                                    <th>PREÇO MÉDIO</th>
+                                    <th colspan="2">AÇÕES</th> <!--Defini duas colunas para Ações ter os botãos alterar e excluir juntos-->
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr class="text-center" v-for="(fundo, posicao) in listaAtivos">
+                                    <td>{{ fundo.codigo }}</td>
+                                    <td>{{ fundo.ativo }}</td>
+                                    <td>{{ fundo.cotas }}</td>
+                                    <td>R$ {{ String(fundo.precoMedio).replace('.',',') }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-warning" @click="alterar(posicao)">ALTERAR</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-danger" @click="excluir(posicao)">EXCLUIR</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
+
     <script type="text/javascript">
         class Fundo {
             constructor(codigo, ativo, cotas, precoMedio) {
