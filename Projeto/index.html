@@ -16,17 +16,28 @@
 
 <body>
 
-    <div id="app" class="container my-5"> <div class="row mb-5 text-center">
+    <div id="app" class="container my-5"> 
+        <div class="row mb-5 text-center">
+
             <div class="col " >
                 <h1 class="display-5 fw-light text-primary">💼 CARTEIRA DE INVESTIMENTOS</h1>
                 <p class="text-muted text-uppercase tracking-wider">GERENCIE SEUS FILL'S COM PRATICIDADE</p>
             </div>
+
         </div>
 
-        <div class="row"> <div class="col-md-6"> <div class="card shadow-lg mt-4"> <div class="card-header"> <h4 class="text-center">CADASTRO DE ATIVOS</h4>
-                    </div> <div class="card-body"> <form action="#" method="post" @submit.prevent="salvar()">
+        <div class="row"> 
+            <div class="col-md-4"> 
+                <div class="card shadow-lg mt-4"> 
 
-                            <div class="mb-3">
+                    <div class="card-header"> 
+                        <h4 class="text-center text-secondary" >CADASTRO DE ATIVOS</h4>
+                    </div> 
+
+                    <div class="card-body"> 
+                        <form action="#" method="post" @submit.prevent="salvar()">
+
+                            <div class="mb-3 ">
                                 <label for="ativo">ATIVO:</label>
                                 <input type="text" class="form-control" v-model="ativo" pattern="[A-Za-z0-9]+" placeholder="EX: GARE11">
                             </div>
@@ -53,23 +64,24 @@
                         </form>
                     </div> </div> </div>
 
-            <div class="col-md-6">
+            <div class="col-md-8">
 
                 <div class="card shadow-lg mt-4">
 
-                    <div class="card-header"> <h4 class="text-center">FUNDOS IMOBILIÁRIOS</h4>
+                    <div class="card-header"> 
+                        <h4 class="text-center text-secondary">FUNDOS IMOBILIÁRIOS</h4>
                     </div>
 
                     <div class="card-body"> <table class="table table-striped">
 
                             <thead>
                                 <tr class="text-center">
-                                    <th>CÓDIGO</th>
-                                    <th>ATIVO</th>
-                                    <th>COTAS</th>
-                                    <th>PREÇO MÉDIO</th>
-                                    <th class="text-info">VALOR DE MERCADO</th>
-                                    <th colspan="2">AÇÕES</th> </tr>
+                                    <th class="text-secondary">CÓDIGO</th>
+                                    <th class="text-secondary">ATIVO</th>
+                                    <th class="text-secondary">COTAS</th>
+                                    <th class="text-secondary">PREÇO MÉDIO</th>
+                                    <th class="text-secondary">VALOR DE MERCADO</th>
+                                    <th class="text-secondary" colspan="2">AÇÕES</th> </tr>
                             </thead>
 
                             <tbody>
@@ -79,7 +91,7 @@
                                     <td>{{ fundo.cotas }}</td>
                                     <td>R$ {{ String(fundo.precoMedio).replace('.',',') }}</td>
                                     
-                                    <td class="text-info fw-bold">
+                                    <td class="fw-bold">
                                         <span v-if="cotacoesAtuais[fundo.ativo] === null" class="text-warning small">Restrito (Free)</span>
                                         <span v-else-if="cotacoesAtuais[fundo.ativo]">R$ {{ String(cotacoesAtuais[fundo.ativo].toFixed(2)).replace('.',',') }}</span>
                                         <span v-else>Carregando...</span>
