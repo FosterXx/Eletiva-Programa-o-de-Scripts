@@ -16,27 +16,15 @@
 
 <body>
 
-    <div id="app" class="container my-5"> <!-- Seria a folha inteira o container -->
-
-        <div class="row mb-5 text-center">
+    <div id="app" class="container my-5"> <div class="row mb-5 text-center">
             <div class="col " >
                 <h1 class="display-5 fw-light text-primary">💼 CARTEIRA DE INVESTIMENTOS</h1>
                 <p class="text-muted text-uppercase tracking-wider">GERENCIE SEUS FILL'S COM PRATICIDADE</p>
             </div>
         </div>
 
-        <div class="row"> <!-- Defini as linhas do container para que possamos dividir em colunas com o col -->
-
-            <div class="col-md-6"> <!-- esta div divide a tela em duas 6+6 (tela total = 12) -->
-
-                <div class="card shadow-lg mt-4"> <!-- começo do card de cadastro -->
-
-                    <div class="card-header"> <!-- começo do card de titulo -->
-                        <h4 class="text-center">CADASTRO DE ATIVOS</h4>
-                    </div> <!-- fim do card de titulo -->
-                
-                    <div class="card-body"> <!-- começo do card de campos -->
-                        <form action="#" method="post" @submit.prevent="salvar()">
+        <div class="row"> <div class="col-md-6"> <div class="card shadow-lg mt-4"> <div class="card-header"> <h4 class="text-center">CADASTRO DE ATIVOS</h4>
+                    </div> <div class="card-body"> <form action="#" method="post" @submit.prevent="salvar()">
 
                             <div class="mb-3">
                                 <label for="ativo">ATIVO:</label>
@@ -63,23 +51,16 @@
                                 <button class="btn btn-secondary" disabled>SALVAR</button>
                             </div>
                         </form>
-                    </div> <!-- fim do card de campos -->
-
-                </div> <!-- fim do card de cadastro -->
-
-            </div>
+                    </div> </div> </div>
 
             <div class="col-md-6">
 
                 <div class="card shadow-lg mt-4">
 
-                    <div class="card-header"> <!-- começo do card de titulo -->
-                        <h4 class="text-center">FUNDOS IMOBILIÁRIOS</h4>
+                    <div class="card-header"> <h4 class="text-center">FUNDOS IMOBILIÁRIOS</h4>
                     </div>
 
-                    <div class="card-body"> <!-- começo do card de campos -->
-
-                        <table class="table table-striped">
+                    <div class="card-body"> <table class="table table-striped">
 
                             <thead>
                                 <tr class="text-center">
@@ -87,8 +68,8 @@
                                     <th>ATIVO</th>
                                     <th>COTAS</th>
                                     <th>PREÇO MÉDIO</th>
-                                    <th colspan="2">AÇÕES</th> <!--Defini duas colunas para Ações ter os botãos alterar e excluir juntos-->
-                                </tr>
+                                    <th class="text-info">VALOR DE MERCADO</th>
+                                    <th colspan="2">AÇÕES</th> </tr>
                             </thead>
 
                             <tbody>
@@ -97,6 +78,13 @@
                                     <td>{{ fundo.ativo }}</td>
                                     <td>{{ fundo.cotas }}</td>
                                     <td>R$ {{ String(fundo.precoMedio).replace('.',',') }}</td>
+                                    
+                                    <td class="text-info fw-bold">
+                                        <span v-if="cotacoesAtuais[fundo.ativo] === null" class="text-warning small">Restrito (Free)</span>
+                                        <span v-else-if="cotacoesAtuais[fundo.ativo]">R$ {{ String(cotacoesAtuais[fundo.ativo].toFixed(2)).replace('.',',') }}</span>
+                                        <span v-else>Carregando...</span>
+                                    </td>
+
                                     <td>
                                         <a href="#" class="btn btn-warning" @click="alterar(posicao)">ALTERAR</a>
                                     </td>
@@ -135,7 +123,8 @@
                 cotas: '',
                 precoMedio: '',
                 posicao: -1, 
-                listaAtivos: []
+                listaAtivos: [],
+                cotacoesAtuais: {} // Guarda o preço de mercado
             },
             methods: {
                 salvar: function() {
@@ -171,6 +160,7 @@
 
                     }
                     this.armazenar()
+                    this.buscarCotacoes() // Atualiza os preços após salvar uma inclusão ou alteração
                     this.limpar()
                 },
                 verificar: function() {
@@ -210,10 +200,45 @@
                         })
                         
                     }
+                },
+                buscarCotacoes: function() {
+                    if (this.listaAtivos.length === 0) return; // Verifica se existe algum fundo na lista, se não ele trava e nao executa, se sim ele executa
+
+                    // Executa consultas individuais da API ativo por ativo
+                    this.listaAtivos.forEach(fundo => { // Vai linha por linha na lista
+                        let ticket = `${fundo.ativo.toUpperCase()}.SA`; // Coloca tudo em maiusculo e coloca o .SA no final para o Brapi aceitar
+                        let url = `https://brapi.dev/api/quote/${ticket}?token=1kh37pATagMxSEBULc66E4`; // Endpoint e token de acesso para as informações
+
+                        fetch(url)
+                            .then(response => { // Pega o retorno da api
+                                if (!response.ok) { // Se der erro, joga pro .catch la embaixo
+                                    throw new Error(`Erro ${response.status}`);
+                                }
+                                return response.json(); // Se estiver ok, converte e salva a resposta em json
+                            })
+                            .then(dados => { // Acesso aos dados convertidos
+                                if (dados && dados.results && dados.results[0]) { // Verifica se veio como os dados da resposta da API
+                                    let resultado = dados.results[0]; // Isola o primeiro item retornado para ter acesso as informações como o preço.
+                                    let nomeLimpo = resultado.symbol.replace('.SA', ''); // Tira o .SA do nome do ativo
+                                    let preco = resultado.regularMarketPrice; // Separa o preco da cota em tempo real
+                                    
+                                    // Adiciona ao escopo do Vue respeitando os dados
+                                    Vue.set(this.cotacoesAtuais, nomeLimpo, preco);
+                                }
+                            })
+                            .catch(error => {
+                                console.warn(`⚠️ O ativo ${fundo.ativo} retornou erro ou restrição na API.`);
+                                // Define o erro como null para que o HTML retire o estado "Carregando..." e exiba a mensagem amigável
+                                if (this.cotacoesAtuais[fundo.ativo] === undefined) {
+                                    Vue.set(this.cotacoesAtuais, fundo.ativo, null);
+                                }
+                            });
+                    });
                 }
             },
             created() {
                 this.carregar()
+                this.buscarCotacoes() // Consulta as cotações assim que carregar
             }
 
         }) 
