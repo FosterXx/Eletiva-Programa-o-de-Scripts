@@ -245,7 +245,7 @@
                                 }
                             })
                             .catch(error => {
-                                console.warn(`⚠️ O ativo ${fundo.ativo} retornou erro ou restrição na API.`);
+                                console.warn(`O ativo ${fundo.ativo} retornou erro ou restrição na API.`);
                                 // Define o erro como null para que o HTML retire o estado "Carregando..." e exiba a mensagem amigável
                                 if (this.cotacoesAtuais[fundo.ativo] === undefined) {
                                     Vue.set(this.cotacoesAtuais, fundo.ativo, null);
