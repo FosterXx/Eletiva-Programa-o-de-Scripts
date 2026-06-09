@@ -56,11 +56,14 @@
                             </div>
 
                             <div v-if="verificar()">
-                                <button class="btn btn-primary">SALVAR</button>                        
+                                <button class="btn btn-primary btn-sm">SALVAR</button>
+                                <!-- <button class="btn btn-danger btn-sm" v-if="posicao != -1" @click="limpar()">CANCELAR</button> -->
                             </div>
                             <div v-else>
-                                <button class="btn btn-secondary" disabled>SALVAR</button>
+                                <button class="btn btn-secondary btn-sm" disabled>SALVAR</button>
+                                <!-- <button class="btn btn-danger btn-sm" v-if="posicao != -1" @click="limpar()">CANCELAR</button> -->
                             </div>
+
                         </form>
                     </div> </div> </div>
 
@@ -72,41 +75,44 @@
                         <h4 class="text-center text-secondary">FUNDOS IMOBILIÁRIOS</h4>
                     </div>
 
-                    <div class="card-body"> <table class="table table-striped">
+                    <div class="card-body"> 
 
-                            <thead>
-                                <tr class="text-center">
-                                    <th class="text-secondary">CÓDIGO</th>
-                                    <th class="text-secondary">ATIVO</th>
-                                    <th class="text-secondary">COTAS</th>
-                                    <th class="text-secondary">PREÇO MÉDIO</th>
-                                    <th class="text-secondary">VALOR DE MERCADO</th>
-                                    <th class="text-secondary" colspan="2">AÇÕES</th> </tr>
-                            </thead>
+                        <div class="table-responsive">
 
-                            <tbody>
-                                <tr class="text-center" v-for="(fundo, posicao) in listaAtivos">
-                                    <td>{{ fundo.codigo }}</td>
-                                    <td>{{ fundo.ativo }}</td>
-                                    <td>{{ fundo.cotas }}</td>
-                                    <td>R$ {{ String(fundo.precoMedio).replace('.',',') }}</td>
-                                    
-                                    <td class="fw-bold">
-                                        <span v-if="cotacoesAtuais[fundo.ativo] === null" class="text-warning small">Restrito (Free)</span>
-                                        <span v-else-if="cotacoesAtuais[fundo.ativo]">R$ {{ String(cotacoesAtuais[fundo.ativo].toFixed(2)).replace('.',',') }}</span>
-                                        <span v-else>Carregando...</span>
-                                    </td>
+                            <table class="table table-striped table-hover align-middle">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th class="text-secondary">CÓDIGO</th>
+                                        <th class="text-secondary">ATIVO</th>
+                                        <th class="text-secondary">COTAS</th>
+                                        <th class="text-secondary">PREÇO MÉDIO</th>
+                                        <th class="text-secondary">VALOR DE MERCADO</th>
+                                        <th class="text-secondary" colspan="2">AÇÕES</th> </tr>
+                                </thead>
 
-                                    <td>
-                                        <a href="#" class="btn btn-warning" @click="alterar(posicao)">ALTERAR</a>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-danger" @click="excluir(posicao)">EXCLUIR</a>
-                                    </td>
-                                </tr>
-                            </tbody>
+                                <tbody>
+                                    <tr class="text-center" v-for="(fundo, posicao) in listaAtivos">
+                                        <td>{{ fundo.codigo }}</td>
+                                        <td>{{ fundo.ativo }}</td>
+                                        <td>{{ fundo.cotas }}</td>
+                                        <td>R$ {{ String(fundo.precoMedio).replace('.',',') }}</td>
+                                        
+                                        <td class="fw-bold">
+                                            <span v-if="cotacoesAtuais[fundo.ativo] === null" class="text-warning small">Restrito (Free)</span>
+                                            <span v-else-if="cotacoesAtuais[fundo.ativo]">R$ {{ String(cotacoesAtuais[fundo.ativo].toFixed(2)).replace('.',',') }}</span>
+                                            <span v-else>Carregando...</span>
+                                        </td>
 
-                        </table>
+                                        <td>
+                                            <a href="#" class="btn btn-warning btn-sm" @click="alterar(posicao)">ALTERAR</a>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="btn btn-danger btn-sm" @click="excluir(posicao)">EXCLUIR</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
